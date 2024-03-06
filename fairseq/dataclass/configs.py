@@ -346,6 +346,30 @@ class DistributedTrainingConfig(FairseqDataclass):
             "batchnorm population statistics"
         },
     )
+    co2: int = field(
+        default=0,
+        metadata={
+            "help": "CO2"
+        },
+    )
+    co2_clip: int = field(
+        default=0,
+        metadata={
+            "help": "CO2 clip"
+        },
+    )
+    co2_gap_penalty: int = field(
+        default=0,
+        metadata={
+            "help": "CO2 gap penalty"
+        },
+    )
+    co2_clip_threshold: Optional[float] = field(
+        default=None,
+        metadata={
+            "help": "Clipping threshold for CO2"
+        },
+    )
     slowmo_momentum: Optional[float] = field(
         default=None,
         metadata={
@@ -364,6 +388,9 @@ class DistributedTrainingConfig(FairseqDataclass):
     )
     localsgd_frequency: int = field(
         default=3, metadata={"help": "Local SGD allreduce frequency"}
+    )
+    slowmo_frequency: int = field(
+        default=48, metadata={"help": "SlowMo frequency"}
     )
     nprocs_per_node: int = field(
         default=max(1, torch.cuda.device_count()),

@@ -605,3 +605,38 @@ def transformer_lm_gpt3_175(args):
     args.decoder_embed_dim = safe_getattr(args, "decoder_embed_dim", 12288)
     args.decoder_attention_heads = safe_getattr(args, "decoder_attention_heads", 96)
     base_gpt3_architecture(args)
+
+
+## gpt2 paper config
+@register_model_architecture("transformer_lm", "transformer_lm_gpt2_paper_small")
+def transformer_lm_gpt2_paper_small(args):
+    args.decoder_embed_dim = safe_getattr(args, "decoder_embed_dim", 768)
+    args.decoder_ffn_embed_dim = safe_getattr(args, "decoder_ffn_embed_dim", 3072)
+    args.decoder_layers = safe_getattr(args, "decoder_layers", 12)
+    args.decoder_attention_heads = safe_getattr(args, "decoder_attention_heads", 12)
+    args.dropout = safe_getattr(args, "dropout", 0.1)
+    args.attention_dropout = safe_getattr(args, "attention_dropout", 0.1)
+    args.activation_fn = safe_getattr(args, "activation_fn", "gelu")
+    base_lm_architecture(args)
+
+@register_model_architecture("transformer_lm", "transformer_lm_gpt2_paper_medium")
+def transformer_lm_gpt2_paper_medium(args):
+    args.decoder_embed_dim = safe_getattr(args, "decoder_embed_dim", 1024)
+    args.decoder_ffn_embed_dim = safe_getattr(args, "decoder_ffn_embed_dim", 4096)
+    args.decoder_layers = safe_getattr(args, "decoder_layers", 24)
+    args.decoder_attention_heads = safe_getattr(args, "decoder_attention_heads", 16)
+    args.dropout = safe_getattr(args, "dropout", 0.1)
+    args.attention_dropout = safe_getattr(args, "attention_dropout", 0.1)
+    args.activation_fn = safe_getattr(args, "activation_fn", "gelu")
+    base_lm_architecture(args)
+
+@register_model_architecture("transformer_lm", "transformer_lm_gpt2_paper_large")
+def transformer_lm_gpt2_paper_large(args):
+    args.decoder_embed_dim = safe_getattr(args, "decoder_embed_dim", 1280)
+    args.decoder_ffn_embed_dim = safe_getattr(args, "decoder_ffn_embed_dim", 5120)
+    args.decoder_layers = safe_getattr(args, "decoder_layers", 36)
+    args.decoder_attention_heads = safe_getattr(args, "decoder_attention_heads", 20)
+    args.dropout = safe_getattr(args, "dropout", 0.1)
+    args.attention_dropout = safe_getattr(args, "attention_dropout", 0.1)
+    args.activation_fn = safe_getattr(args, "activation_fn", "gelu")
+    base_lm_architecture(args)

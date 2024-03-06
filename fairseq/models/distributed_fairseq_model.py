@@ -118,6 +118,11 @@ def DistributedFairseqModel(args, model, process_group, device):
             slowmo_momentum=args.slowmo_momentum,
             slowmo_base_algorithm=slowmo_base_algorithm,
             localsgd_frequency=args.localsgd_frequency,
+            slowmo_frequency=args.slowmo_frequency,
+            co2=args.co2,
+            co2_clip = args.co2_clip,
+            co2_gap_penalty = args.co2_gap_penalty,
+            co2_clip_threshold = args.co2_clip_threshold,
         )
         # forward missing getattr and state_dict/load_state_dict to orig model
         wrapped_model = ModuleProxyWrapper(wrapped_model)
