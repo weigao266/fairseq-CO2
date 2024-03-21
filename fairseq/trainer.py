@@ -1030,13 +1030,12 @@ class Trainer(object):
 
         # Some distributed wrappers (e.g., SlowMo) need access to the optimizer
         # after the step
-        if hasattr(self.model, "perform_slowmo"):
-            if self.cfg.distributed_training.co2:
-                self.model.perform_co2(self.optimizer.optimizer, getattr(self.optimizer, "fp32_params", None))
-                print("===================================Using CO2===================================")
-            else:
-                self.model.perform_slowmo(self.optimizer.optimizer, getattr(self.optimizer, "fp32_params", None))
-                print("===================================Using SlowMo===================================")
+        if hasattr(self.model, "perform_co2"):
+            self.model.perform_co2(self.optimizer.optimizer, getattr(self.optimizer, "fp32_params", None))
+            print("===================================Using CO2===================================")
+        elif hasattr(self.model, "perform_slowmo"):
+            self.model.perform_co2(self.optimizer.optimizer, getattr(self.optimizer, "fp32_params", None))
+            print("===================================Using SlowMo===================================")
 
         logging_output = None
         if not overflow or self.cfg.distributed_training.ddp_backend == "slowmo":

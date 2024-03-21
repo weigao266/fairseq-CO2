@@ -24,12 +24,21 @@ logger = logging.getLogger(__name__)
 
 _SLOWMO_DDP_DISABLED = False
 try:
-    from fairscale.experimental.nn.data_parallel import (
+    from fairscale.experimental.nn.data_parallel.gossip.distributed import (
         SlowMoBaseAlgorithm,
         SlowMoDistributedDataParallel,
     )
 except ImportError:
     _SLOWMO_DDP_DISABLED = True
+
+_CO2_DDP_DISABLED = False
+try:
+    from fairscale.experimental.nn.data_parallel.gossip.co2 import (
+        CO2BaseAlgorithm,
+        CO2DistributedDataParallel,
+    )
+except ImportError:
+    _CO2_DDP_DISABLED = True
 
 
 def DistributedFairseqModel(args, model, process_group, device):
@@ -110,7 +119,6 @@ def DistributedFairseqModel(args, model, process_group, device):
             else:
                 args.slowmo_momentum = 0.6
         slowmo_base_algorithm = SlowMoBaseAlgorithm[args.slowmo_base_algorithm.upper()]
-
         wrapped_model = SlowMoDistributedDataParallel(
             module=model.to(device),
             broadcast_buffers=args.broadcast_buffers,
@@ -119,7 +127,35 @@ def DistributedFairseqModel(args, model, process_group, device):
             slowmo_base_algorithm=slowmo_base_algorithm,
             localsgd_frequency=args.localsgd_frequency,
             slowmo_frequency=args.slowmo_frequency,
-            co2=args.co2,
+        )
+        # forward missing getattr and state_dict/load_state_dict to orig model
+        wrapped_model = ModuleProxyWrapper(wrapped_model)
+    elif args.ddp_backend == "co2":
+        if _CO2_DDP_DISABLED:
+            raise ImportError(
+                "Cannot find CO2DistributedDataParallel. "
+                "Please install fairscale with: pip install fairscale-co2"
+            )
+
+        if args.co2_outer_momentum is None:
+            if args.distributed_world_size <= 16:
+                args.co2_outer_momentum = 0.0
+            elif args.distributed_world_size <= 32:
+                args.co2_outer_momentum = 0.2
+            elif args.distributed_world_size <= 64:
+                args.co2_outer_momentum = 0.5
+            else:
+                args.co2_outer_momentum = 0.6
+
+        co2_base_algorithm = CO2BaseAlgorithm[args.co2_base_algorithm.upper()]
+        wrapped_model = CO2DistributedDataParallel(
+            module=model.to(device),
+            broadcast_buffers=args.broadcast_buffers,
+            nprocs_per_node=args.nprocs_per_node,
+            outer_momentum=args.co2_outer_momentum,
+            co2_base_algorithm=co2_base_algorithm,
+            localsgd_frequency=args.localsgd_frequency,
+            outer_frequency=args.co2_outer_frequency,
             co2_clip = args.co2_clip,
             co2_gap_penalty = args.co2_gap_penalty,
             co2_clip_threshold = args.co2_clip_threshold,

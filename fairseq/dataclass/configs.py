@@ -346,10 +346,10 @@ class DistributedTrainingConfig(FairseqDataclass):
             "batchnorm population statistics"
         },
     )
-    co2: int = field(
-        default=0,
+    co2_base_algorithm: str = field(
+        default="localsgd",
         metadata={
-            "help": "CO2"
+            "help": "Base algorithm. Either 'localsgd' or 'sgp'."
         },
     )
     co2_clip: int = field(
@@ -369,6 +369,15 @@ class DistributedTrainingConfig(FairseqDataclass):
         metadata={
             "help": "Clipping threshold for CO2"
         },
+    )
+    co2_outer_momentum: Optional[float] = field(
+        default=None,
+        metadata={
+            "help": "CO2 outer momentum"
+        },
+    )
+    co2_outer_frequency: int = field(
+        default=48, metadata={"help": "CO2 outer frequency"}
     )
     slowmo_momentum: Optional[float] = field(
         default=None,

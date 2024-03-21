@@ -6,7 +6,7 @@
 BATCH_SIZE=2
 TOKENS_PER_SAMPLE=2048
 MAX_TOKEN=$((TOKENS_PER_SAMPLE*BATCH_SIZE))
-DATA_DIR=/mnt/data/NLP_3090/sunweigao/wiki103-jsonl
+DATA_DIR=/cpfs01/user/sunweigao/wikitext-opt
 ARCH=transformer_lm_gpt2_medium
 
 REMARK=CO2
@@ -32,10 +32,10 @@ TENSOR_DIR=tensorboard/tensorboard-co2/$START_TIME-$ARCH-$REMARK
 torchrun --standalone --nproc_per_node=2 \
     $(which fairseq-train) --task language_modeling \
         $DATA_DIR --bpe gpt2 \
-        --save-dir checkpoints/$prefix/${ARCH} --tensorboard-logdir $TENSOR_DIR \
+        --save-dir checkpoints/$prefix/${ARCH} \
         --arch $ARCH --clip-norm=$CLIP_NORM \
-        --ddp-backend pytorch_ddp \
-        --fp16 --bf16 --fp16-init-scale 4 --fp16-scale-window 128 --min-loss-scale 0.0001220703125 \
+        --ddp-backend co2 --co2-base-algorithm localsgd \
+        --fp16 --fp16-init-scale 4 --fp16-scale-window 128 --min-loss-scale 0.0001220703125 \
         --optimizer adam --adam-betas '(0.9, 0.98)' --weight-decay $decay \
         --lr $LR --lr-scheduler inverse_sqrt --warmup-updates $WARM_UP --warmup-init-lr 1e-08 \
         --tokens-per-sample $TOKENS_PER_SAMPLE --sample-break-mode none \

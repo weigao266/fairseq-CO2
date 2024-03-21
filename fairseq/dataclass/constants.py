@@ -43,6 +43,7 @@ DDP_BACKEND_CHOICES = ChoiceEnum(
         "no_c10d",  # alias for legacy_ddp
         "pytorch_ddp",
         "slowmo",
+        "co2",
     ]
 )
 DDP_COMM_HOOK_CHOICES = ChoiceEnum(["none", "fp16"])
