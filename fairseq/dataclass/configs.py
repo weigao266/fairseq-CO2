@@ -349,35 +349,35 @@ class DistributedTrainingConfig(FairseqDataclass):
     co2_base_algorithm: str = field(
         default="localsgd",
         metadata={
-            "help": "Base algorithm. Either 'localsgd' or 'sgp'."
+            "help": "Base algorithm for inner loop of CO2"
         },
     )
     co2_clip: bool = field(
         default=False,
         metadata={
-            "help": "CO2 clip"
+            "help": "Whether to use outer momentum clipping in CO2"
         },
     )
     co2_clip_threshold: Optional[float] = field(
         default=1.0,
         metadata={
-            "help": "Clipping threshold for CO2"
+            "help": "Clipping threshold in CO2"
         },
     )
-    co2_gap_penalty: int = field(
-        default=0,
+    co2_gap_penalty: Optional[float] = field(
+        default=1.0,
         metadata={
-            "help": "CO2 gap penalty"
+            "help": "Gap penalty in CO2"
         },
     )
     co2_outer_momentum: Optional[float] = field(
         default=None,
         metadata={
-            "help": "CO2 outer momentum"
+            "help": "Outer momentum factor in CO2"
         },
     )
     co2_outer_frequency: int = field(
-        default=48, metadata={"help": "CO2 outer frequency"}
+        default=20, metadata={"help": "Outer loop frequency in CO2"}
     )
     slowmo_momentum: Optional[float] = field(
         default=None,
