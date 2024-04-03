@@ -29,12 +29,12 @@ START_TIME=`date +%Y%m%d-%H:%M:%S`
 LOG_FILE=${logger_dir}/${ARCH}_${START_TIME}_$REMARK.log
 TENSOR_DIR=tensorboard/tensorboard-co2/$START_TIME-$ARCH-$REMARK
 
-torchrun --standalone --nproc_per_node=2 \
+torchrun --standalone --nproc_per_node=4 \
     $(which fairseq-train) --task language_modeling \
         $DATA_DIR --bpe gpt2 \
         --save-dir checkpoints/$prefix/${ARCH} \
         --arch $ARCH --clip-norm=$CLIP_NORM \
-        --ddp-backend co2 --co2-base-algorithm localsgd \
+        --ddp-backend co2 --co2-outer-momentum 0.2 --co2-base-algorithm localsgd --co2-clip --co2-clip-threshold 1.0 \
         --fp16 --fp16-init-scale 4 --fp16-scale-window 128 --min-loss-scale 0.0001220703125 \
         --optimizer adam --adam-betas '(0.9, 0.98)' --weight-decay $decay \
         --lr $LR --lr-scheduler inverse_sqrt --warmup-updates $WARM_UP --warmup-init-lr 1e-08 \
@@ -42,3 +42,6 @@ torchrun --standalone --nproc_per_node=2 \
         --update-freq $UPDATE_FREQ \
         --batch-size $BATCH_SIZE --num-workers 4 \
         --max-update $MAX_UPDATE --log-format json --log-interval 1 2>&1 | sudo tee -a $LOG_FILE
+
+
+# --ddp-backend co2 --co2-outer-momentum 0.2 --co2-base-algorithm localsgd --co2-clip --co2-clip-threshold 1.0 \

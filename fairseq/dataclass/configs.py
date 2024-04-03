@@ -352,22 +352,22 @@ class DistributedTrainingConfig(FairseqDataclass):
             "help": "Base algorithm. Either 'localsgd' or 'sgp'."
         },
     )
-    co2_clip: int = field(
-        default=0,
+    co2_clip: bool = field(
+        default=False,
         metadata={
             "help": "CO2 clip"
+        },
+    )
+    co2_clip_threshold: Optional[float] = field(
+        default=1.0,
+        metadata={
+            "help": "Clipping threshold for CO2"
         },
     )
     co2_gap_penalty: int = field(
         default=0,
         metadata={
             "help": "CO2 gap penalty"
-        },
-    )
-    co2_clip_threshold: Optional[float] = field(
-        default=None,
-        metadata={
-            "help": "Clipping threshold for CO2"
         },
     )
     co2_outer_momentum: Optional[float] = field(

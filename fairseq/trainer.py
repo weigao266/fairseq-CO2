@@ -1034,7 +1034,7 @@ class Trainer(object):
             self.model.perform_co2(self.optimizer.optimizer, getattr(self.optimizer, "fp32_params", None))
             print("===================================Using CO2===================================")
         elif hasattr(self.model, "perform_slowmo"):
-            self.model.perform_co2(self.optimizer.optimizer, getattr(self.optimizer, "fp32_params", None))
+            self.model.perform_slowmo(self.optimizer.optimizer, getattr(self.optimizer, "fp32_params", None))
             print("===================================Using SlowMo===================================")
 
         logging_output = None
