@@ -159,6 +159,7 @@ def DistributedFairseqModel(args, model, process_group, device):
             co2_clip = args.co2_clip,
             co2_gap_penalty = args.co2_gap_penalty,
             co2_clip_threshold = args.co2_clip_threshold,
+            co2_use_streams = args.co2_use_streams,
         )
         # forward missing getattr and state_dict/load_state_dict to orig model
         wrapped_model = ModuleProxyWrapper(wrapped_model)

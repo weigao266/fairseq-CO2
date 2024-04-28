@@ -358,6 +358,12 @@ class DistributedTrainingConfig(FairseqDataclass):
             "help": "Whether to use outer momentum clipping in CO2"
         },
     )
+    co2_use_streams: bool = field(
+        default=False,
+        metadata={
+            "help": "Whether to use separate stream for CO2"
+        },
+    )
     co2_clip_threshold: Optional[float] = field(
         default=1.0,
         metadata={
