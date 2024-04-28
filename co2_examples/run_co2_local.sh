@@ -15,7 +15,6 @@ rm -rf checkpoints
 prefix=lm
 MAX_UPDATE=100000
 WARM_UP=2000
-# UPDATE_FREQ=$(( 128 / $BATCH_SIZE / 8 ))
 UPDATE_FREQ=1
 PORT=$(( $RANDOM + 2000 ))
 echo $PORT
@@ -42,6 +41,3 @@ torchrun --standalone --nproc_per_node=4 \
         --update-freq $UPDATE_FREQ \
         --batch-size $BATCH_SIZE --num-workers 4 \
         --max-update $MAX_UPDATE --log-format json --log-interval 1 2>&1 | sudo tee -a $LOG_FILE
-
-
-# --ddp-backend co2 --co2-outer-momentum 0.2 --co2-base-algorithm localsgd --co2-clip --co2-clip-threshold 1.0 \
