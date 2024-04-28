@@ -1,3 +1,5 @@
+# Fairseq-CO2
+
 This repository shows an example of utilizing CO2 within [Fairseq](https://github.com/facebookresearch/fairseq).
 
 --------------------------------------------------------------------------------
@@ -13,9 +15,14 @@ This repository shows an example of utilizing CO2 within [Fairseq](https://githu
 git clone https://github.com/weigao266/fairseq-CO2.git
 cd fairseq-CO2
 pip install --editable ./
+```
 
-# on MacOS:
-# CFLAGS="-stdlib=libc++" pip install --editable ./
+* The implementation of CO2 is integrated in Fairscale at [fairscale-CO2](). **To install fairscale-CO2** and develop locally:
+
+``` bash
+git clone https://github.com/weigao266/fairscale-CO2.git
+cd fairscale-CO2
+pip install --editable ./
 ```
 
 * **For faster training** install NVIDIA's [apex](https://github.com/NVIDIA/apex) library:
